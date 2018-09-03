@@ -6,7 +6,7 @@ import com.mediaproject.imagescraper.factory.StreamingFactory;
 import com.mediaproject.locationInfo.LocationMapper;
 import com.mediaproject.streamingEnums.Streamer;
 import com.mediaproject.twitterClient.SearchProcessor;
-import com.mediaproject.twitterClient.TrendProcessor;
+import com.mediaproject.twitterClient.TrendProcessorAsyncRunner;
 
 import twitter4j.TwitterException;
 
@@ -30,12 +30,13 @@ public class App {
 
 		// Initialize the twitter clients
 		SearchProcessor tweetStreamer = (SearchProcessor) streamingFactory.getHandler(Streamer.TwitterSearch);
-		TrendProcessor trendProcessor = (TrendProcessor) streamingFactory.getHandler(Streamer.TwitterTrend);
-		
+		TrendProcessorAsyncRunner trendProcessorAsyncRunner = (TrendProcessorAsyncRunner) streamingFactory
+				.getHandler(Streamer.TwitterTrend);
+
 		// Kick off the Search
 //		tweetStreamer.TwitterConfig();
-		
-		//Trending Info topics
-		trendProcessor.getTrends(LocationMapper.getLocationInfo());
+
+		// Trending Info topics
+		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
 	}
 }

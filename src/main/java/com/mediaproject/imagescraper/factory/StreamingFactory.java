@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.mediaproject.streamingEnums.Streamer;
 import com.mediaproject.twitterClient.SearchProcessor;
-import com.mediaproject.twitterClient.TrendProcessor;
+import com.mediaproject.twitterClient.TrendProcessorAsyncRunner;
 import com.mediaproject.twitterClient.TwitterProcessor;
 
 public class StreamingFactory {
@@ -14,7 +14,7 @@ public class StreamingFactory {
 
 	static {
 		streamingFactoryMap.put("TwitterSearch", new SearchProcessor());
-		streamingFactoryMap.put("TwitterTrend", new TrendProcessor());
+		streamingFactoryMap.put("TwitterTrend", new TrendProcessorAsyncRunner());
 	}
 
 	public TwitterProcessor getHandler(Streamer twitter) {

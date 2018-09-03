@@ -1,9 +1,14 @@
 package com.mediaproject.twitterClient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Date;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import com.mediaproject.twitter.mappers.TrendsCollection;
 
 import twitter4j.Trend;
 import twitter4j.Trends;
@@ -11,48 +16,59 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
-public class TrendProcessor implements TwitterProcessor {
-	
+public class TrendProcessor implements TwitterProcessor, Callable<TrendsCollection> {
+
 	private static Integer TRENDS_LIMIT = 10;
 	private static Logger logger = Logger.getLogger(TrendProcessor.class.getName());
-	
+	private int cityId;
+
+	public TrendProcessor(int cityId) {
+		this.cityId = cityId;
+	}
+
 	Comparator<Trend> trendComparator = new Comparator<Trend>() {
-		
+
 		@Override
 		public int compare(Trend trend1, Trend trend2) {
 			return trend2.getTweetVolume() - trend1.getTweetVolume();
 		}
 	};
-	 
-	
-	public void getTrends(List<Integer> cities) throws TwitterException {
+
+	public TrendsCollection getTrends(int cityId) throws TwitterException {
+
+		logger.info("Executing city " + cityId);
+
 		Twitter twitter = TwitterFactory.getSingleton();
+		Trends currentCityTrend = twitter.getPlaceTrends(cityId);
+		Trend[] trends = currentCityTrend.getTrends();
+		logger.info("Retrieved Trends for " + currentCityTrend.getLocation().getName());
+		Arrays.sort(trends, trendComparator);
+		return processTrendInfo(trends, currentCityTrend.getLocation().getName());
+	}
 
-		for (int i = 0; i < cities.size(); i++) {
-			
-			int cityId = cities.get(i);
+	public TrendsCollection processTrendInfo(Trend[] trends, String locationName) {
 
-			Trends currentCityTrend = twitter.getPlaceTrends(cityId);
-			Trend[] trends = currentCityTrend.getTrends();
-			Arrays.sort(trends, trendComparator);
-			System.out.println("----------------------------");
-			System.out.println("Current City " + currentCityTrend.getLocation().getName());
-			processTrendInfo(trends);
-			System.out.println("----------------------------");
+		TrendsCollection trendsCollection = new TrendsCollection();
+		trendsCollection.setCityId(cityId);
+		trendsCollection.setDateOfTrend(new Date());
+		trendsCollection.setLocationName(new String(locationName));
 
-		}
+		trendsCollection.setName(new ArrayList<>(
+				Arrays.stream(trends).limit(TRENDS_LIMIT).map(trend -> trend.getName()).collect(Collectors.toList())));
+
+		trendsCollection.setQuery(new ArrayList<>(
+				Arrays.stream(trends).limit(TRENDS_LIMIT).map(trend -> trend.getQuery()).collect(Collectors.toList())));
+
+		trendsCollection.setTweetVolume(new ArrayList<>(Arrays.stream(trends).limit(TRENDS_LIMIT)
+				.map(trend -> trend.getTweetVolume()).collect(Collectors.toList())));
+
+		return trendsCollection;
 
 	}
-	
-	
-	public void processTrendInfo(Trend[] trends) {
 
-		for (int j = 0; j < TRENDS_LIMIT && j < trends.length ; j++) {
-			logger.info("Topic " + "->" + trends[j].getName());
-			logger.info("Query " + "->" + trends[j].getQuery());
-			logger.info("Volume " + "->" + trends[j].getTweetVolume());
-		}
-		
+	@Override
+	public TrendsCollection call() throws Exception {
+		return getTrends(cityId);
 	}
-	
+
 }
