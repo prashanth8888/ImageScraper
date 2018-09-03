@@ -3,6 +3,7 @@ package com.mediaproject.imagescraper;
 import java.util.logging.Logger;
 
 import com.mediaproject.imagescraper.factory.StreamingFactory;
+import com.mediaproject.locationInfo.LocationMapper;
 import com.mediaproject.streamingEnums.Streamer;
 import com.mediaproject.twitterClient.TwitterStreamer;
 
@@ -30,6 +31,9 @@ public class App {
 		TwitterStreamer tweetStreamer = (TwitterStreamer) streamingFactory.getHandler(Streamer.Twitter);
 
 		// Kick off the Search
-		tweetStreamer.TwitterConfig();
+//		tweetStreamer.TwitterConfig();
+		
+		//Trending Info topics
+		tweetStreamer.getTrends(LocationMapper.getLocationInfo());
 	}
 }
