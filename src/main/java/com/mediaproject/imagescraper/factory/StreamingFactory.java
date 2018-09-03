@@ -4,17 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mediaproject.streamingEnums.Streamer;
-import com.mediaproject.twitterClient.TwitterStreamer;
+import com.mediaproject.twitterClient.SearchProcessor;
+import com.mediaproject.twitterClient.TrendProcessor;
+import com.mediaproject.twitterClient.TwitterProcessor;
 
 public class StreamingFactory {
 
-	public static Map<String, StreamingFactory> streamingFactoryMap = new HashMap<>();
+	public static Map<String, TwitterProcessor> streamingFactoryMap = new HashMap<>();
 
 	static {
-		streamingFactoryMap.put("Twitter", new TwitterStreamer());
+		streamingFactoryMap.put("TwitterSearch", new SearchProcessor());
+		streamingFactoryMap.put("TwitterTrend", new TrendProcessor());
 	}
 
-	public StreamingFactory getHandler(Streamer twitter) {
+	public TwitterProcessor getHandler(Streamer twitter) {
 		return streamingFactoryMap.get(twitter.name());
 	}
 }
