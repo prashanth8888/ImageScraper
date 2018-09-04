@@ -12,7 +12,10 @@ import com.mediaproject.twitter.mappers.TrendsCollection;
 
 public class TrendProcessorAsyncRunner implements TwitterProcessor{
 	private static Logger logger = Logger.getLogger(TrendProcessorAsyncRunner.class.getName());
-
+	
+	//Inject Search processor for use
+	private static SearchProcessor searchProcessor = new SearchProcessor();
+	
 	public static int TrendProcessorThreadResoruce = 10;
 
 	public void getTrends(List<Integer> cities) {
@@ -32,6 +35,7 @@ public class TrendProcessorAsyncRunner implements TwitterProcessor{
 			TrendsCollection currentTrendsCollection = null;
 			try {
 				currentTrendsCollection = future.get();
+				searchProcessor.TwitterConfig(currentTrendsCollection);
 				logger.info(currentTrendsCollection.toString());
 			} catch (InterruptedException e) {
 				logger.severe("Possible error in Thread Scheduling ");

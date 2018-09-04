@@ -28,7 +28,6 @@ public class App {
 		init();
 
 		// Initialize the twitter clients
-		SearchProcessor tweetStreamer = (SearchProcessor) streamingFactory.getHandler(Streamer.TwitterSearch);
 		TrendProcessorAsyncRunner trendProcessorAsyncRunner = (TrendProcessorAsyncRunner) streamingFactory
 				.getHandler(Streamer.TwitterTrend);
 		YahooAPIAuthenticator yahoolocationInfoApi = new YahooAPIAuthenticator();
@@ -39,6 +38,6 @@ public class App {
 //		tweetStreamer.TwitterConfig();
 
 		// Trending Info topics
-//		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
+		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
 	}
 }
