@@ -7,8 +7,7 @@ import com.mediaproject.locationInfo.LocationMapper;
 import com.mediaproject.streamingEnums.Streamer;
 import com.mediaproject.twitterClient.SearchProcessor;
 import com.mediaproject.twitterClient.TrendProcessorAsyncRunner;
-
-import twitter4j.TwitterException;
+import com.mediaproject.yahoo.api.YahooAPIAuthenticator;
 
 /**
  * @author Prashanth Seralathan
@@ -23,7 +22,7 @@ public class App {
 		streamingFactory = new StreamingFactory();
 	}
 
-	public static void main(String[] args) throws TwitterException {
+	public static void main(String[] args) throws Exception {
 		logger.info("Starting the Main App");
 		logger.info("Main App has completed running");
 		init();
@@ -32,11 +31,14 @@ public class App {
 		SearchProcessor tweetStreamer = (SearchProcessor) streamingFactory.getHandler(Streamer.TwitterSearch);
 		TrendProcessorAsyncRunner trendProcessorAsyncRunner = (TrendProcessorAsyncRunner) streamingFactory
 				.getHandler(Streamer.TwitterTrend);
+		YahooAPIAuthenticator yahoolocationInfoApi = new YahooAPIAuthenticator();
+		
+		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
 
 		// Kick off the Search
 //		tweetStreamer.TwitterConfig();
 
 		// Trending Info topics
-		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
+//		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
 	}
 }

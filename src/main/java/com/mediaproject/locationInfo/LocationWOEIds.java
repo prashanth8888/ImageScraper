@@ -2,7 +2,7 @@ package com.mediaproject.locationInfo;
 
 public class LocationWOEIds {
 	
-	static Integer New_York =  2459115;
+	 static Integer New_York =  2459115;
 	 static Integer Los_Angeles=  2442047;
 	 static Integer Chicago=  2379574;
 	 static Integer Houston=  2424766;
