@@ -108,16 +108,19 @@ public class YahooLocationFinder {
 	}
 
 	public void mapLatitudeLongitude(String response, int woeId) {
+		
 		JSONObject jsonResponseObj = new JSONObject(response);
 		JSONObject jsonResultsWrapper = jsonResponseObj.getJSONObject("query");
 		JSONObject jsonResultsArr = jsonResultsWrapper.getJSONObject("results");
 
 		if (jsonResultsArr != null && jsonResultsArr.length() > 0) {
+			
 			JSONObject currentPlace = jsonResultsArr.getJSONObject("place");
 			String placeName = currentPlace.getString("name");
 			String latitude = currentPlace.getJSONObject("centroid").getString("latitude");
 			String longtitude = currentPlace.getJSONObject("centroid").getString("longitude");
 			woeIdGeoLocationMapper.woeIdGeoLocationMap.put(woeId, new CityGeoLocation(placeName, latitude, longtitude));
+		
 		}
 	}
 

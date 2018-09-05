@@ -63,7 +63,6 @@ public class SearchProcessor extends StreamingFactory implements TwitterProcesso
 		for (Status tweet : tweets) {
 			System.out.println("User " + tweet.getUser().getName());
 			System.out.println("Text " + tweet.getText());
-			logger.info("---------------------------------------------------");
 		}
 
 	}

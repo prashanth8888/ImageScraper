@@ -15,8 +15,6 @@ public class YahooAPIAuthenticator {
 
 	private static Logger log = Logger.getLogger(YahooAPIAuthenticator.class.getName());
 
-
-//	protected static String yahooServer = "https://yboss.yahooapis.com/geo/";
 	protected static String yahooServer = "https://query.yahooapis.com/v1/public/yql";
 	
 	/** The HTTP request object used for the connection */
@@ -26,10 +24,6 @@ public class YahooAPIAuthenticator {
 
 	private static final int HTTP_STATUS_OK = 200;
 
-	/**
-	 *
-	 * @return
-	 */
 	public int getLocationDatafromYahoo(int woeId) throws UnsupportedEncodingException, Exception {
 
 // Add query
