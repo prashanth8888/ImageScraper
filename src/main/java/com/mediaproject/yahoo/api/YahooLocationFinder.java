@@ -19,8 +19,6 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import twitter4j.JSONObject;
 
 /**
- * @author David Hardtke
- * @author xyz Simple HTTP Request implementation
  */
 public class YahooLocationFinder {
 

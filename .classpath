@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="/Users/ps/Downloads/twitter4j-4.0.7/lib/twitter4j-core-4.0.7.jar"/>
 	<classpathentry kind="lib" path="/Users/ps/Downloads/twitter4j-4.0.7/lib/twitter4j-stream-4.0.7.jar"/>
 	<classpathentry kind="lib" path="/Users/ps/Downloads/signpost-core-1.2.1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/ps/Downloads/postgresql-42.2.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

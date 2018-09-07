@@ -1,9 +1,10 @@
 package com.mediaproject.imagescraper;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import com.mediaproject.database.InitializeTwitterDB;
 import com.mediaproject.imagescraper.factory.StreamingFactory;
-import com.mediaproject.locationInfo.LocationMapper;
 import com.mediaproject.streamingEnums.Streamer;
 import com.mediaproject.twitterClient.TrendProcessorAsyncRunner;
 import com.mediaproject.yahoo.api.YahooAPIAuthenticator;
@@ -15,10 +16,14 @@ import com.mediaproject.yahoo.api.YahooAPIAuthenticator;
 public class App {
 	private static Logger logger = Logger.getLogger(App.class.getName());
 	private static StreamingFactory streamingFactory;
+	private static InitializeTwitterDB twitterDBConnection;
+	private static YahooAPIAuthenticator yahoolocationInfoApi;
 
 	// Initialize Streaming factories
-	public static void init() {
+	public static void init() throws IOException {
 		streamingFactory = new StreamingFactory();
+		twitterDBConnection = new InitializeTwitterDB();
+		yahoolocationInfoApi = new YahooAPIAuthenticator();
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -28,11 +33,16 @@ public class App {
 		// Initialize the APIs
 		TrendProcessorAsyncRunner trendProcessorAsyncRunner = (TrendProcessorAsyncRunner) streamingFactory
 				.getHandler(Streamer.TwitterTrend);
-		YahooAPIAuthenticator yahoolocationInfoApi = new YahooAPIAuthenticator();
 		
-		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
+		//Connect to the Twitter DB
+		twitterDBConnection.connect();
+		
+		//Get the location Info
+//		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
+		
 		// Trending Info topics
-		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
+//		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
+		
 		logger.info("Main App has completed running");
 	}
 }
