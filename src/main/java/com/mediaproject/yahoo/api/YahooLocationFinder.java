@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.mediaproject.locationInfo.CityGeoLocation;
-import com.mediaproject.locationInfo.woeIdGeoLocationMapper;
+import com.mediaproject.locationInfo.WoeIdGeoLocationMapper;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -117,8 +117,7 @@ public class YahooLocationFinder {
 			String placeName = currentPlace.getString("name");
 			String latitude = currentPlace.getJSONObject("centroid").getString("latitude");
 			String longtitude = currentPlace.getJSONObject("centroid").getString("longitude");
-			woeIdGeoLocationMapper.woeIdGeoLocationMap.put(woeId, new CityGeoLocation(placeName, latitude, longtitude));
-		
+			WoeIdGeoLocationMapper.woeIdGeoLocationMap.put(woeId, new CityGeoLocation(placeName, latitude, longtitude));
 		}
 	}
 

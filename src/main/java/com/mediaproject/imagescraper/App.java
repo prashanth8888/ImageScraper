@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.mediaproject.database.InitializeTwitterDB;
 import com.mediaproject.imagescraper.factory.StreamingFactory;
+import com.mediaproject.locationInfo.LocationMapper;
 import com.mediaproject.streamingEnums.Streamer;
 import com.mediaproject.twitterClient.TrendProcessorAsyncRunner;
 import com.mediaproject.yahoo.api.YahooAPIAuthenticator;
@@ -18,9 +19,11 @@ public class App {
 	private static StreamingFactory streamingFactory;
 	private static InitializeTwitterDB twitterDBConnection;
 	private static YahooAPIAuthenticator yahoolocationInfoApi;
+//	private static Connection twitterDBConn;
 
 	// Initialize Streaming factories
 	public static void init() throws IOException {
+//		twitterDBConn = twitterDBConnection.connect();
 		streamingFactory = new StreamingFactory();
 		twitterDBConnection = new InitializeTwitterDB();
 		yahoolocationInfoApi = new YahooAPIAuthenticator();
@@ -34,11 +37,8 @@ public class App {
 		TrendProcessorAsyncRunner trendProcessorAsyncRunner = (TrendProcessorAsyncRunner) streamingFactory
 				.getHandler(Streamer.TwitterTrend);
 		
-		//Connect to the Twitter DB
-		twitterDBConnection.connect();
-		
 		//Get the location Info
-//		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
+		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
 		
 		// Trending Info topics
 //		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());

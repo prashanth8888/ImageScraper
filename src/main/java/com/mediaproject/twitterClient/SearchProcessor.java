@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 import com.mediaproject.imagescraper.factory.StreamingFactory;
 import com.mediaproject.locationInfo.CityGeoLocation;
-import com.mediaproject.locationInfo.woeIdGeoLocationMapper;
+import com.mediaproject.locationInfo.WoeIdGeoLocationMapper;
 import com.mediaproject.twitter.mappers.TrendsCollection;
 
 import twitter4j.GeoLocation;
@@ -30,7 +30,7 @@ public class SearchProcessor extends StreamingFactory implements TwitterProcesso
 		logger.info("--------------------------------------");
 		logger.info("Retrieving Tweets for the City " + trendsCollection.getLocationName());
 
-		CityGeoLocation coordinatesInfo = woeIdGeoLocationMapper.woeIdGeoLocationMap.get(trendsCollection.getCityId());
+		CityGeoLocation coordinatesInfo = WoeIdGeoLocationMapper.woeIdGeoLocationMap.get(trendsCollection.getCityId());
 		Query query = new Query();
 		GeoLocation location = null;
 

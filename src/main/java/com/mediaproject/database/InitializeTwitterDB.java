@@ -9,18 +9,18 @@ import java.util.Properties;
 
 public class InitializeTwitterDB {
 	
-	private String url;
-    private String user;
-    private String password;
+	private static String url;
+    private static String user;
+    private static String password;
     
     
     public InitializeTwitterDB() throws IOException {
     	Properties prop = new Properties();  
     	InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("./twitterdb.properties");
     	prop.load(inStream);
-    	this.url = prop.getProperty("hostname");
-    	this.user = prop.getProperty("user");
-    	this.password = prop.getProperty("password");
+    	url = prop.getProperty("hostname");
+    	user = prop.getProperty("user");
+    	password = prop.getProperty("password");
     	inStream.close();
     }
     
@@ -29,11 +29,11 @@ public class InitializeTwitterDB {
      *
      * @return a Connection object
      */
-    public Connection connect() {
+    public static Connection connect() {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected to the PostgreSQL server successfully.");
+            System.out.println("Initialized Connection to PostgreSQL server");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
