@@ -38,10 +38,10 @@ public class App {
 				.getHandler(Streamer.TwitterTrend);
 		
 		//Get the location Info
-		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
+//		yahoolocationInfoApi.setUpLocationGeoCodeInfo(LocationMapper.getLocationInfo());
 		
 		// Trending Info topics
-//		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
+		trendProcessorAsyncRunner.getTrends(LocationMapper.getLocationInfo());
 		
 		logger.info("Main App has completed running");
 	}

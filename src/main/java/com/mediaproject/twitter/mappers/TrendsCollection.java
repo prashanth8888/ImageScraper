@@ -12,12 +12,12 @@ import java.util.List;
 public class TrendsCollection {
 
 	private int cityId;
-
+	
 	private String locationName;
 
 	private Date dateOfTrend;
 
-	private List<String> name;
+	private List<String> names;
 
 	private List<String> query;
 
@@ -49,12 +49,12 @@ public class TrendsCollection {
 		this.dateOfTrend = dateOfTrend;
 	}
 
-	public List<String> getName() {
-		return name;
+	public List<String> getNames() {
+		return names;
 	}
 
-	public void setName(List<String> name) {
-		this.name = name;
+	public void setNames(List<String> names) {
+		this.names = names;
 	}
 
 	public List<String> getQuery() {
@@ -85,7 +85,7 @@ public class TrendsCollection {
 	public String toString() {
 		StringBuilder trendResult = new StringBuilder();
 		trendResult.append("Location : " + locationName).append("\n");
-		trendResult.append("Query Names: " + name.toString()).append("\n");
+		trendResult.append("Query Names: " + names.toString()).append("\n");
 		return trendResult.toString();
 	}
 

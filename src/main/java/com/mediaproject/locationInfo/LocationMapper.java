@@ -1,17 +1,35 @@
 package com.mediaproject.locationInfo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.mediaproject.database.InitializeTwitterDB;
 
 public class LocationMapper {
-	private static List<Integer> woeIDs = new ArrayList<>();
 	
-	public static List<Integer> getLocationInfo() {
+	
+	private static Map<Integer, Integer> locationWoeIdMap = new HashMap<>();
+	
+	
+	public static Map<Integer, Integer> getLocationInfo() throws SQLException {
 		
-		woeIDs.add(LocationWOEIds.New_York);
-		woeIDs.add(LocationWOEIds.San_Francisco);
-		woeIDs.add(LocationWOEIds.Seattle);
+		Connection twitterDBConnection = InitializeTwitterDB.connect();
 		
-		return woeIDs;
+		String getLocationData = "Select woeid, cityId from location";
+		Statement statement = twitterDBConnection.createStatement();
+		
+		ResultSet results = statement.executeQuery(getLocationData);
+		while(results.next()) {
+			locationWoeIdMap.put(results.getInt(1), results.getInt(2));
+		}		
+		
+		twitterDBConnection.close();
+		
+		return locationWoeIdMap;
 	}
+	
 }

@@ -21,8 +21,10 @@ public class TrendProcessor implements TwitterProcessor, Callable<TrendsCollecti
 	private static Integer TRENDS_LIMIT = 10;
 	private static Logger logger = Logger.getLogger(TrendProcessor.class.getName());
 	private int cityId;
+	private int woeId;
 
-	public TrendProcessor(int cityId) {
+	public TrendProcessor(int woeId, int cityId) {
+		this.woeId = woeId;
 		this.cityId = cityId;
 	}
 
@@ -34,12 +36,11 @@ public class TrendProcessor implements TwitterProcessor, Callable<TrendsCollecti
 		}
 	};
 
-	public TrendsCollection getTrends(int cityId) throws TwitterException {
+	public TrendsCollection getTrends(int woeId, int cityId) throws TwitterException {
 
-		logger.info("Executing city " + cityId);
-
+		logger.info("Executing city " + woeId);
 		Twitter twitter = TwitterFactory.getSingleton();
-		Trends currentCityTrend = twitter.getPlaceTrends(cityId);
+		Trends currentCityTrend = twitter.getPlaceTrends(woeId);
 		Trend[] trends = currentCityTrend.getTrends();
 		logger.info("Retrieved Trends for " + currentCityTrend.getLocation().getName());
 		Arrays.sort(trends, trendComparator);
@@ -53,7 +54,7 @@ public class TrendProcessor implements TwitterProcessor, Callable<TrendsCollecti
 		trendsCollection.setDateOfTrend(new Date());
 		trendsCollection.setLocationName(new String(locationName));
 
-		trendsCollection.setName(new ArrayList<>(
+		trendsCollection.setNames(new ArrayList<>(
 				Arrays.stream(trends).limit(TRENDS_LIMIT).map(trend -> trend.getName()).collect(Collectors.toList())));
 
 		trendsCollection.setQuery(new ArrayList<>(
@@ -61,14 +62,14 @@ public class TrendProcessor implements TwitterProcessor, Callable<TrendsCollecti
 
 		trendsCollection.setTweetVolume(new ArrayList<>(Arrays.stream(trends).limit(TRENDS_LIMIT)
 				.map(trend -> trend.getTweetVolume()).collect(Collectors.toList())));
-
+		
 		return trendsCollection;
 
 	}
 
 	@Override
 	public TrendsCollection call() throws Exception {
-		return getTrends(cityId);
+		return getTrends(woeId, cityId);
 	}
 
 }
