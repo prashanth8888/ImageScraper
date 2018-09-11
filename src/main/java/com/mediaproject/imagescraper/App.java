@@ -19,11 +19,8 @@ public class App {
 	private static StreamingFactory streamingFactory;
 	private static InitializeTwitterDB twitterDBConnection;
 	private static YahooAPIAuthenticator yahoolocationInfoApi;
-//	private static Connection twitterDBConn;
 
-	// Initialize Streaming factories
 	public static void init() throws IOException {
-//		twitterDBConn = twitterDBConnection.connect();
 		streamingFactory = new StreamingFactory();
 		twitterDBConnection = new InitializeTwitterDB();
 		yahoolocationInfoApi = new YahooAPIAuthenticator();

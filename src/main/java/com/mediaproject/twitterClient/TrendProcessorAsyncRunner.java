@@ -3,6 +3,7 @@ package com.mediaproject.twitterClient;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,23 +18,29 @@ import java.util.logging.Logger;
 import com.mediaproject.database.InitializeTwitterDB;
 import com.mediaproject.twitter.mappers.TrendsCollection;
 
-public class TrendProcessorAsyncRunner implements TwitterProcessor{
+import twitter4j.TwitterException;
+
+public class TrendProcessorAsyncRunner implements TwitterProcessor {
 	private static Logger logger = Logger.getLogger(TrendProcessorAsyncRunner.class.getName());
 	private static Connection twitterDBConncetion;
+	private static InitializeTwitterDB initializeTwitterDB;
+	private static SearchProcessor searchProcessor;
+	private static String SQL_POPULATE_TRENDINGTOPICS = "INSERT INTO trendingtopics(cityrefid, trendingdate, topic, topicId, nooftweets) "
+			+ "VALUES(?,?,?,DEFAULT,?) returning topicId"; 
 	
 	public TrendProcessorAsyncRunner() {
 		try {
-			InitializeTwitterDB initializeTwitterDB = new InitializeTwitterDB();
-		} catch(Exception e) {
+			initializeTwitterDB = new InitializeTwitterDB();
+		} catch (Exception e) {
 			logger.severe("Error getting DB instance " + e.getMessage());
 		}
-		
+
 		twitterDBConncetion = InitializeTwitterDB.connect();
+		searchProcessor = new SearchProcessor();
 	}
-	
-	//Inject Search processor for use
-	private static SearchProcessor searchProcessor = new SearchProcessor();
-	
+
+	// Inject Search processor for use
+
 	public static int TrendProcessorThreadResoruce = 10;
 
 	public void getTrends(Map<Integer, Integer> citiesInfo) {
@@ -54,7 +61,6 @@ public class TrendProcessorAsyncRunner implements TwitterProcessor{
 			try {
 				currentTrendsCollection = future.get();
 				persistTrendInfo(currentTrendsCollection);
-//				searchProcessor.TwitterConfig(currentTrendsCollection);
 				logger.info(currentTrendsCollection.toString());
 			} catch (InterruptedException e) {
 				logger.severe("Possible error in Thread Scheduling ");
@@ -66,33 +72,32 @@ public class TrendProcessorAsyncRunner implements TwitterProcessor{
 		}
 
 	}
-	
-	public boolean persistTrendInfo(TrendsCollection currentCollection) throws SQLException {
-		String SQL_POPULATE_TRENDINGTOPICS = "INSERT INTO trendingtopics(cityrefid, trendingdate, topic, nooftweets) VALUES(?,?,?,?)";
+
+	public boolean persistTrendInfo(TrendsCollection currentCollection) throws SQLException, TwitterException {
+		
 		PreparedStatement statement = twitterDBConncetion.prepareStatement(SQL_POPULATE_TRENDINGTOPICS);
 		int cityId = currentCollection.getCityId();
+		currentCollection.setTopicId(new ArrayList<>());
 		
-		for(int i = 0; i < currentCollection.getNames().size() ; i++) {
+		for (int i = 0; i < currentCollection.getNames().size(); i++) {
+			
 			statement.setInt(1, cityId);
 			statement.setDate(2, new Date(Calendar.getInstance().getTimeInMillis()));
-			statement.setString(3,  currentCollection.getNames().get(i));
-			if(currentCollection.getTweetVolume() != null && currentCollection.getTweetVolume().get(i) != null)
+			statement.setString(3, currentCollection.getNames().get(i));
+			if (currentCollection.getTweetVolume() != null && currentCollection.getTweetVolume().get(i) != null)
 				statement.setLong(4, currentCollection.getTweetVolume().get(i));
-			statement.executeUpdate();
+			
+			ResultSet result = statement.executeQuery();
+			
+			if(result.next()) {
+				//Gets the auto-generated Topic id
+				currentCollection.getTopicId().add(result.getLong(1)); 
+			}	
 		}
-		
+
+		// Get the Tweet Info
+		searchProcessor.TwitterConfig(currentCollection);
 		return true;
 	}
-	
-//	public int getLastTopicId() throws SQLException {
-//		String getLastTopicId = "Select topicid from trendingtopics order by topicid desc LIMIT 1";
-//		Statement statement = twitterDBConncetion.prepareStatement(getLastTopicId);
-//		ResultSet result = statement.getResultSet();
-//		if(result.next()) {
-//			return result.getInt(1);
-//		}
-//		//Default to start with
-//		return 1;
-//	}
 
 }

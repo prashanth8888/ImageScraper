@@ -24,6 +24,8 @@ public class TrendsCollection {
 	private List<String> hashTag;
 
 	private List<Integer> tweetVolume;
+	
+	private List<Long> topicId;
 
 	public int getCityId() {
 		return cityId;
@@ -79,6 +81,14 @@ public class TrendsCollection {
 
 	public void setTweetVolume(List<Integer> tweetVolume) {
 		this.tweetVolume = tweetVolume;
+	}
+
+	public List<Long> getTopicId() {
+		return topicId;
+	}
+
+	public void setTopicId(List<Long> topicId) {
+		this.topicId = topicId;
 	}
 
 	@Override

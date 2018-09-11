@@ -39,6 +39,7 @@ public class TrendProcessor implements TwitterProcessor, Callable<TrendsCollecti
 	public TrendsCollection getTrends(int woeId, int cityId) throws TwitterException {
 
 		logger.info("Executing city " + woeId);
+		
 		Twitter twitter = TwitterFactory.getSingleton();
 		Trends currentCityTrend = twitter.getPlaceTrends(woeId);
 		Trend[] trends = currentCityTrend.getTrends();
