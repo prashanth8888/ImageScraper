@@ -97,6 +97,7 @@ public class TrendProcessorAsyncRunner implements TwitterProcessor {
 
 		// Get the Tweet Info
 		searchProcessor.TwitterConfig(currentCollection);
+		statement.close();
 		return true;
 	}
 

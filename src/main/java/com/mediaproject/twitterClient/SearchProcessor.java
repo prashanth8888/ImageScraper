@@ -77,9 +77,9 @@ public class SearchProcessor extends StreamingFactory implements TwitterProcesso
 
 	}
 
-	public void processResults(QueryResult searchResult, long topicIdRef){
+	public void processResults(QueryResult searchResult, long topicIdRef) throws SQLException{
 
-		PreparedStatement statement;
+		PreparedStatement statement = null;
 		try {
 			statement = twitterDBConncetion.prepareStatement(SQL_INSERT_TWEET);
 			List<Status> tweets = searchResult.getTweets();
@@ -123,6 +123,8 @@ public class SearchProcessor extends StreamingFactory implements TwitterProcesso
 			logger.info("Probably the UserID/TopicID combination exists " + e1.getMessage());
 		} catch(Exception e) {
 			logger.severe("Exception while inserting tweet info " + e.getMessage());
+		} finally {
+			statement.close();
 		}
 
 	}
