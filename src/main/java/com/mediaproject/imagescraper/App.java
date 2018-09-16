@@ -3,7 +3,6 @@ package com.mediaproject.imagescraper;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;

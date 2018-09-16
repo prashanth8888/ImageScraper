@@ -13,6 +13,7 @@ import com.mediaproject.imagescraper.factory.StreamingFactory;
 import com.mediaproject.locationInfo.CityGeoLocation;
 import com.mediaproject.locationInfo.WoeIdGeoLocationMapper;
 import com.mediaproject.twitter.mappers.TrendsCollection;
+import com.vdurmont.emoji.EmojiParser;
 
 import twitter4j.GeoLocation;
 import twitter4j.Query;
@@ -31,6 +32,7 @@ public class SearchProcessor extends StreamingFactory implements TwitterProcesso
 			+ "VALUES(?,?,?,?,?,?,?,?,?)";
 	private static InitializeTwitterDB initializeTwitterDB;
 	private static Connection twitterDBConncetion;
+	
 
 	public SearchProcessor() {
 		try {
@@ -88,7 +90,7 @@ public class SearchProcessor extends StreamingFactory implements TwitterProcesso
 				
 				statement.setLong(1, topicIdRef);
 				statement.setLong(2, tweet.getUser().getId());
-				statement.setString(3, tweet.getText());
+				statement.setString(3, EmojiParser.removeAllEmojis(tweet.getText()));
 				statement.setString(4, tweet.getUser().get400x400ProfileImageURLHttps());
 				
 				boolean validLoc = Optional.ofNullable(tweet.getGeoLocation()).isPresent();

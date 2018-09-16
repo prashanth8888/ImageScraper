@@ -33,7 +33,7 @@ public class InitializeTwitterDB {
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Initialized Connection to PostgreSQL server");
+            System.out.println("Spawning an Twitter DB connection");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
